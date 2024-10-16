@@ -1,87 +1,88 @@
-/* Стиль для всієї таблиці */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-    font-family: Arial, sans-serif;
+/* Стиль основного контейнера */
+.travel-plan {
+    background-color: rgb(255, 165, 0);
+    /* Колір фону */
+    width: 500px;
+    /* Ширина блоку */
+    padding: 20px;
+    /* Внутрішній відступ */
+    color: white;
+    /* Колір тексту */
 }
 
-/* Стиль для заголовків таблиці */
-thead th {
-    background-color: #f4d7d7;
-    padding: 15px;
+/* Стиль заголовка 1-го рівня */
+.travel-plan h1 {
+    font-size: 25px;
+    /* Розмір тексту */
+    font-weight: 900;
+    /* Насиченість шрифту */
+    margin-bottom: 10px;
+    /* Зовнішній відступ */
+}
+
+/* Стиль основного списку */
+.main-list {
+    list-style: none;
+    /* Вимикає стандартні маркери списку */
+    background-color: rgb(103, 158, 128);
+    /* Колір фону */
+    padding-right: 20px;
+    /* Внутрішній відступ справа */
+    padding-left: 50px;
+    /* Внутрішній відступ зліва */
+}
+
+/* Спан в елементах основного списку */
+.main-list>li>span {
+    display: inline-block;
+    /* Рядково-блочний тип */
+    font-size: 20px;
+    /* Розмір тексту */
+    font-weight: 700;
+    /* Насиченість шрифту */
+    background-color: rgb(199, 124, 106);
+    /* Колір фону */
+    margin-bottom: 10px;
+    /* Зовнішній відступ */
+    padding: 10px 20px;
+    /* Внутрішній відступ */
+}
+
+/* Стиль підсписку (2-го рівня) */
+.sub-list {
+    list-style: none;
+    /* Вимикає стандартні маркери списку */
+    background-color: rgb(153, 180, 102);
+    /* Колір фону */
+    margin-bottom: 10px;
+    /* Зовнішній відступ */
+    padding-left: 40px;
+    /* Внутрішній відступ зліва */
+}
+
+/* Спан в елементах підсписку */
+.sub-list>li>span {
+    display: inline-block;
+    /* Рядково-блочний тип */
     font-size: 18px;
-    font-weight: bold;
-    color: #fff;
+    /* Розмір тексту */
+    font-style: italic;
+    /* Курсив */
+    background-color: rgb(218, 106, 32);
+    /* Колір фону */
+    padding: 10px 20px;
+    /* Внутрішній відступ */
+    margin-bottom: 10px;
+    /* Зовнішній відступ */
 }
 
-/* Стиль для тіла таблиці */
-tbody td {
-    padding: 10px;
-    color: #fff;
-}
-
-/* Чергування кольорів для рядків таблиці */
-tbody tr:nth-child(odd) {
-    background-color: #f0b2b2;
-    /* світліший */
-}
-
-tbody tr:nth-child(even) {
-    background-color: #cf4e4e;
-    /* темніший */
-}
-
-/* Стиль для першого стовпця (план) */
-tbody td:first-child {
-    font-weight: bold;
-}
-
-/* Стиль для клітинок з текстом "+" */
-tbody td:contains('+') {
-    background-color: #e58f8f;
-    /* світліший відтінок для плюса */
-}
-
-/* Стиль для клітинок з текстом "-" */
-tbody td:contains('-') {
-    background-color: #f7c7c7;
-    /* світліший відтінок для мінуса */
-}
-
-/* Стиль для різних заголовків */
-.b1 {
-    color: white;
-    background-color: #ef7d7d;
-}
-
-.b2 {
-    color: white;
-    background-color: #b13a3a;
-}
-
-.b3 {
-    color: white;
-    background-color: #911e1e;
-}
-
-.b4 {
-    color: white;
-    background-color: #651a1a;
-}
-
-/* Стиль для першого стовпця (план) */
-tbody td:first-child {
-    background-color: #911e1e;
-    /* більш насичений колір для першого стовпця */
-    font-weight: bold;
-}
-
-/* Стиль для рядків з чергуванням кольорів */
-.c1 {
-    background-color: #fdaeae;
-}
-
-.c2 {
-    background-color: #e48181;
+/* Стиль для маркерів (використання зображення) */
+.main-list li,
+.sub-list li {
+    background-image: url('your-marker-image.png');
+    /* Замініть на реальний шлях до зображення */
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 24px 24px;
+    /* Розмір маркера */
 }
