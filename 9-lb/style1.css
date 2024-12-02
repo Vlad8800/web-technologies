@@ -1,0 +1,88 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    max-width: 1000px;
+}
+
+.grid-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.grid-item:first-child {
+    grid-column: span 2;
+    /* Make the first item span two columns */
+}
+
+.grid-item img {
+    width: 100%;
+    height: auto;
+    position: relative;
+    top: 90px;
+    margin: 15px;
+
+}
+
+.grid-item h3 {
+    font-size: 1.2em;
+    margin: 15px;
+}
+
+.grid-item p {
+    margin: 25px;
+    color: #555;
+}
+
+.grid-item button {
+    margin: 15px;
+    padding: 10px;
+    background-color: #888;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+.grid-item1 button {
+    margin: 15px;
+    padding: 10px;
+    background-color: #888;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+.grid-item button:hover {
+    background-color: #555;
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}

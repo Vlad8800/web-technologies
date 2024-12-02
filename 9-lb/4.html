@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9_4</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(18, 1fr);
+            /* Рівномірно розділяє контейнер на 18 рядків */
+            gap: 10px;
+            width: 90vw;
+            height: 90vh;
+        }
+
+        .grid-item {
+            background-color: #FFD700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* Розташування елементів */
+        .item1 {
+            grid-column: 1 / span 3;
+            grid-row: 1 / span 18;
+        }
+
+        .item2 {
+            grid-column: 4 / span 2;
+            grid-row: 1 / span 9;
+        }
+
+        .item3 {
+            grid-column: 4 / span 2;
+            grid-row: 10 / span 9;
+        }
+
+        .item4 {
+            grid-column: 6 / span 2;
+            grid-row: 1 / span 6;
+        }
+
+        .item5 {
+            grid-column: 6 / span 2;
+            grid-row: 7 / span 6;
+        }
+
+        .item6 {
+            grid-column: 6 / span 2;
+            grid-row: 13 / span 6;
+        }
+
+        .item7 {
+            grid-column: 8 / span 2;
+            grid-row: 1 / span 4;
+        }
+
+        .item8 {
+            grid-column: 8 / span 2;
+            grid-row: 5 / span 5;
+        }
+
+        .item9 {
+            grid-column: 8 / span 2;
+            grid-row: 10 / span 5;
+        }
+
+        .item10 {
+            grid-column: 8 / span 2;
+            grid-row: 15 / span 4;
+        }
+
+
+        .item11 {
+            grid-column: 10 / span 2;
+            grid-row: 1 / span 3;
+        }
+
+        .item12 {
+            grid-column: 10 / span 2;
+            grid-row: 4 / span 4;
+        }
+
+        .item13 {
+            grid-column: 10 / span 2;
+            grid-row: 9 / span 4;
+        }
+
+        .item14 {
+            grid-column: 10 / span 2;
+            grid-row: 13 / span 3;
+        }
+
+        .item15 {
+            grid-column: 10/ span 2;
+            grid-row: 16 / span 3;
+        }
+
+
+
+        .item17 {
+            grid-column: 12/ span 2;
+            grid-row: 1 / span 2;
+        }
+
+        .item18 {
+            grid-column: 12/ span 2;
+            grid-row: 3/ span 2;
+            ;
+        }
+
+        .item19 {
+            grid-column: 12/ span 2;
+            grid-row: 5/ span 2;
+        }
+
+        .item20 {
+            grid-column: 12/ span 2;
+            grid-row: 7;
+        }
+
+        .item21 {
+            grid-column: 12/ span 2;
+            grid-row: 8;
+        }
+
+        .item22 {
+            grid-column: 12/ span 2;
+            grid-row: 9;
+        }
+
+        .item23 {
+            grid-column: 12/ span 2;
+            grid-row: 10;
+        }
+
+        .item24 {
+            grid-column: 12/ span 2;
+            grid-row: 11;
+        }
+
+        .item25 {
+            grid-column: 12/ span 2;
+            grid-row: 12;
+        }
+
+        .item26 {
+            grid-column: 12/ span 2;
+            grid-row: 13/ span 2;
+        }
+
+        .item27 {
+            grid-column: 12/ span 2;
+            grid-row: 15/ span 2;
+            ;
+        }
+
+        .item28 {
+            grid-column: 12/ span 2;
+            grid-row: 17/ span 2;
+            ;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="grid-container">
+        <div class="grid-item item1">1</div>
+        <div class="grid-item item2">2</div>
+        <div class="grid-item item3">3</div>
+        <div class="grid-item item4">4</div>
+        <div class="grid-item item5">5</div>
+        <div class="grid-item item6">6</div>
+        <div class="grid-item item7">7</div>
+        <div class="grid-item item8">8</div>
+        <div class="grid-item item9">9</div>
+        <div class="grid-item item10">10</div>
+        <div class="grid-item item11">11</div>
+        <div class="grid-item item12">12</div>
+        <div class="grid-item item13">13</div>
+        <div class="grid-item item14">14</div>
+        <div class="grid-item item15">15</div>
+        <div class="grid-item item16">16</div>
+        <div class="grid-item item17">17</div>
+        <div class="grid-item item18">18</div>
+        <div class="grid-item item19">19</div>
+        <div class="grid-item item20">20</div>
+        <div class="grid-item item21">21</div>
+        <div class="grid-item item22">22</div>
+        <div class="grid-item item23">23</div>
+        <div class="grid-item item24">24</div>
+        <div class="grid-item item25">25</div>
+        <div class="grid-item item26">26</div>
+        <div class="grid-item item27">27</div>
+        <div class="grid-item item28">28</div>
+    </div>
+
+</body>
+
+</html>
