@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Система управління продуктами</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-container, .products-list {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, button {
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .product-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .error {
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Система управління продуктами</h1>
+    
+    <div class="form-container">
+        <h2>Додати/Оновити продукт</h2>
+        <div class="form-group">
+            <label for="productName">Назва продукту:</label>
+            <input type="text" id="productName" required>
+        </div>
+        <div class="form-group">
+            <label for="productPrice">Ціна:</label>
+            <input type="number" id="productPrice" min="0" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="productQuantity">Кількість:</label>
+            <input type="number" id="productQuantity" min="0" required>
+        </div>
+        <button onclick="addOrUpdateProduct()">Додати/Оновити продукт</button>
+        <span class="error" id="addError"></span>
+    </div>
+
+    <div class="form-container">
+        <h2>Пошук та дії</h2>
+        <div class="form-group">
+            <label for="searchName">Пошук за назвою:</label>
+            <input type="text" id="searchName">
+            <button onclick="searchProduct()">Шукати</button>
+            <button onclick="makeOrder()">Зробити замовлення</button>
+            <button onclick="deleteProduct()">Видалити</button>
+        </div>
+        <span class="error" id="searchError"></span>
+    </div>
+
+    <div class="products-list" id="productsList"></div>
+
+    <script>
+        // Основні структури даних
+        const products = new Map(); // Зберігання продуктів (id -> {name, price, quantity})
+        const orders = new Set(); // Зберігання активних замовлень
+        const productHistory = new WeakMap(); // Історія змін продуктів
+        const productRefs = new WeakSet(); // Посилання на продукти
+
+        let productId = 1;
+
+        // Додавання або оновлення продукту
+        function addOrUpdateProduct() {
+            const name = document.getElementById('productName').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const quantity = parseInt(document.getElementById('productQuantity').value);
+            const error = document.getElementById('addError');
+
+            if (!name || isNaN(price) || isNaN(quantity)) {
+                error.style.display = 'inline';
+                error.textContent = 'Будь ласка, заповніть усі поля коректно';
+                return;
+            }
+
+            error.style.display = 'none';
+            let existingId = null;
+
+            for (let [id, product] of products) {
+                if (product.name === name) {
+                    existingId = id;
+                    break;
+                }
+            }
+
+            const productData = { name, price, quantity };
+            
+            if (existingId) {
+                products.set(existingId, productData);
+                updateProductHistory(existingId, 'updated');
+            } else {
+                products.set(productId, productData);
+                productRefs.add(productData);
+                updateProductHistory(productId, 'added');
+                productId++;
+            }
+
+            updateProductList();
+            clearForm();
+        }
+
+        // Видалення продукту
+        function deleteProduct() {
+            const name = document.getElementById('searchName').value;
+            const error = document.getElementById('searchError');
+            let productIdToDelete = null;
+
+            for (let [id, product] of products) {
+                if (product.name === name) {
+                    productIdToDelete = id;
+                    break;
+                }
+            }
+
+            if (productIdToDelete) {
+                // Спочатку оновлюємо історію, потім видаляємо
+                updateProductHistory(productIdToDelete, 'deleted');
+                products.delete(productIdToDelete);
+                document.getElementById('searchName').value = ''; // Очищаємо поле пошуку
+                error.style.display = 'none';
+                updateProductList(); // Оновлюємо список без видаленого продукту
+            } else if (name) {
+                error.style.display = 'inline';
+                error.textContent = 'Продукт не знайдено для видалення';
+            }
+        }
+
+        // Пошук продукту
+        function searchProduct() {
+            const name = document.getElementById('searchName').value;
+            const error = document.getElementById('searchError');
+            let found = false;
+
+            for (let [id, product] of products) {
+                if (product.name.toLowerCase().includes(name.toLowerCase())) {
+                    updateProductList([product]);
+                    found = true;
+                    error.style.display = 'none';
+                    break;
+                }
+            }
+
+            if (!found && name) {
+                error.style.display = 'inline';
+                error.textContent = 'Продукт не знайдено';
+            } else if (!name) {
+                updateProductList(); // Показуємо всі доступні продукти, якщо поле пошуку порожнє
+            }
+        }
+
+        // Створення замовлення
+        function makeOrder() {
+            const name = document.getElementById('searchName').value;
+            let targetProduct = null;
+            let productId = null;
+
+            for (let [id, product] of products) {
+                if (product.name === name) {
+                    targetProduct = product;
+                    productId = id;
+                    break;
+                }
+            }
+
+            if (targetProduct && targetProduct.quantity > 0) {
+                targetProduct.quantity--;
+                products.set(productId, targetProduct);
+                orders.add(`Order_${Date.now()}_${name}`);
+                updateProductHistory(productId, 'ordered');
+                
+                if (targetProduct.quantity === 0) {
+                    updateProductList(); // Оновлюємо повний список, якщо продукт закінчився
+                } else {
+                    updateProductList([targetProduct]); // Показуємо лише замовлений продукт
+                }
+            }
+        }
+
+        // Оновлення історії продукту
+        function updateProductHistory(productId, action) {
+            const product = products.get(productId);
+            if (!product) return; // Якщо продукт не існує, нічого не робимо
+            if (!productHistory.has(product)) {
+                productHistory.set(product, []);
+            }
+            const history = productHistory.get(product);
+            history.push({
+                action,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Оновлення списку продуктів
+        function updateProductList(filteredProducts = null) {
+            const list = document.getElementById('productsList');
+            list.innerHTML = '<h2>Список продуктів</h2>';
+            
+            let displayProducts;
+            if (filteredProducts) {
+                displayProducts = filteredProducts;
+            } else {
+                displayProducts = Array.from(products.values()).filter(product => product.quantity > 0);
+            }
+            
+            if (displayProducts.length === 0) {
+                list.innerHTML += '<p>Немає доступних продуктів</p>';
+                return;
+            }
+
+            displayProducts.forEach((product, index) => {
+                const div = document.createElement('div');
+                div.className = 'product-item';
+                div.innerHTML = `
+                    ${product.name} - 
+                    Ціна: ${product.price} грн - 
+                    Кількість: ${product.quantity}
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // Очищення форми
+        function clearForm() {
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productQuantity').value = '';
+        }
+    </script>
+</body>
+</html>

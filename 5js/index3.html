@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Дата та Час</title>
+    <style>
+        .container { 
+            max-width: 800px; 
+            margin: 20px auto; 
+            font-family: Arial, sans-serif;
+        }
+        .section { 
+            margin: 20px 0; 
+        }
+        
+        /* Стилі для годинника */
+        .clock-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+        }
+        .clock-face {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid black;
+            position: relative;
+            background: white;
+        }
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            background: black;
+        }
+        .hour-hand {
+            width: 4px;
+            height: 60px;
+        }
+        .minute-hand {
+            width: 3px;
+            height: 80px;
+        }
+        .second-hand {
+            width: 2px;
+            height: 90px;
+            background: red;
+        }
+        .center {
+            width: 10px;
+            height: 10px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .number {
+            position: absolute;
+            font-size: 16px;
+            width: 100%;
+            height: 100%;
+            top: 90px;
+            text-align: center;
+        }
+        .digital-clock {
+            text-align: center;
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        /* Стилі для таймера */
+        .timer-container {
+            text-align: center;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        .timer-container input[type="datetime-local"] {
+            margin: 10px 0;
+            padding: 5px;
+            width: 200px;
+            font-size: 16px; /* Збільшуємо розмір для кращої видимості */
+        }
+        .timer-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .timer-container button:hover {
+            background-color: #45a049;
+        }
+        .timer-container p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .calendar { 
+            display: grid; 
+            grid-template-columns: repeat(7, 1fr); 
+            gap: 5px; 
+        }
+        .day { 
+            text-align: center; 
+            padding: 10px; 
+        }
+        .header { 
+            background: #f0f0f0; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <h2>1. Аналоговий годинник</h2>
+            <div class="clock-container" id="clock">
+                <div class="clock-face"></div>
+                <div class="digital-clock" id="digitalClock"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="timer-container">
+                <h2>2. Таймер зворотного відліку</h2>
+                <input type="datetime-local" id="countdownInput">
+                <button onclick="startCountdown()">Запустити таймер</button>
+                <p id="countdown">Введіть дату та час для початку</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3. Календар</h2>
+            <input type="month" id="monthInput" onchange="renderCalendar()">
+            <div id="calendar"></div>
+        </div>
+
+        <div class="section">
+            <h2>4. День народження</h2>
+            <input type="date" id="birthdayInput">
+            <button onclick="calculateBirthday()">Розрахувати</button>
+            <div id="birthdayResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Аналоговий годинник
+        const clockFace = document.querySelector('.clock-face');
+        
+        for (let i = 1; i <= 12; i++) {
+            const angle = (i * 30 - 90) * Math.PI / 180;
+            const number = document.createElement('div');
+            number.className = 'number';
+            number.textContent = i;
+            number.style.transform = `rotate(${i * 30}deg) translate(0, -85px) rotate(${-i * 30}deg)`;
+            clockFace.appendChild(number);
+        }
+    
+        const hourHand = document.createElement('div');
+        hourHand.className = 'hand hour-hand';
+        const minuteHand = document.createElement('div');
+        minuteHand.className = 'hand minute-hand';
+        const secondHand = document.createElement('div');
+        secondHand.className = 'hand second-hand';
+        const center = document.createElement('div');
+        center.className = 'center';
+        
+        clockFace.appendChild(hourHand);
+        clockFace.appendChild(minuteHand);
+        clockFace.appendChild(secondHand);
+        clockFace.appendChild(center);
+    
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours() % 12;
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+    
+            const hourDeg = (hours * 30) + (minutes * 0.5);
+            const minuteDeg = minutes * 6;
+            const secondDeg = seconds * 6;
+    
+            hourHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+            minuteHand.style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+            secondHand.style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+    
+            const digitalHours = now.getHours().toString().padStart(2, '0');
+            const digitalMinutes = minutes.toString().padStart(2, '0');
+            const digitalSeconds = seconds.toString().padStart(2, '0');
+            document.getElementById('digitalClock').textContent = 
+                `${digitalHours}:${digitalMinutes}:${digitalSeconds}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    
+        // 2. Таймер зворотного відліку
+        let timerInterval = null;
+
+        function startCountdown() {
+            const countdownDisplay = document.getElementById('countdown');
+            const endTimeInput = document.getElementById('countdownInput').value;
+
+            if (timerInterval !== null) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            if (!endTimeInput) {
+                countdownDisplay.innerText = 'Введіть дату та час!';
+                return;
+            }
+
+            const endTime = new Date(endTimeInput);
+
+            if (isNaN(endTime.getTime())) {
+                countdownDisplay.innerText = 'Неправильна дата або час!';
+                return;
+            }
+
+            const now = new Date();
+            if (endTime <= now) {
+                countdownDisplay.innerText = 'Введіть дату в майбутньому!';
+                return;
+            }
+
+            function updateTimer() {
+                const currentTime = new Date();
+                const timeLeft = endTime - currentTime;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    countdownDisplay.innerText = 'Час вийшов!';
+                } else {
+                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    countdownDisplay.innerText = `Залишилось: ${days}д ${hours}г ${minutes}хв ${seconds}с`;
+                }
+            }
+
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // 3. Календар
+        function renderCalendar() {
+            const monthInput = document.getElementById('monthInput').value;
+            const [year, month] = monthInput ? monthInput.split('-') : [new Date().getFullYear(), new Date().getMonth() + 1];
+            const date = new Date(year, month - 1);
+            const daysInMonth = new Date(year, month, 0).getDate();
+            const firstDay = new Date(year, month - 1, 1).getDay();
+            
+            let html = '<div class="calendar">';
+            ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'].forEach(day => {
+                html += `<div class="day header">${day}</div>`;
+            });
+            
+            for (let i = 0; i < (firstDay + 6) % 7; i++) {
+                html += '<div class="day"></div>';
+            }
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                html += `<div class="day">${day}</div>`;
+            }
+            
+            html += '</div>';
+            document.getElementById('calendar').innerHTML = html;
+        }
+        renderCalendar();
+    
+        // 4. Розрахунок дня народження
+        function calculateBirthday() {
+            const birthday = new Date(document.getElementById('birthdayInput').value);
+            const now = new Date();
+            
+            birthday.setFullYear(now.getFullYear());
+            if (birthday < now) {
+                birthday.setFullYear(now.getFullYear() + 1);
+            }
+            
+            const diff = birthday - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            const months = Math.floor(days / 30);
+            
+            document.getElementById('birthdayResult').textContent = 
+                `До дня народження: ${months} міс., ${days} дн., ${hours} год., ${minutes} хв., ${seconds} сек.`;
+        }
+    </script>
+</body>
+</html>

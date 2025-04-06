@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Light Bulb Simulator</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            margin-top: 30px;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+        .bulb-container {
+            position: relative;
+            margin: 20px 0;
+        }
+        .bulb {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        /* Glass Effect */
+        .glass {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+        }
+
+        /* Regular Bulb */
+        .regular {
+            width: 80px;
+            height: 120px;
+            background: linear-gradient(180deg, rgba(200,200,200,0.8) 0%, rgba(150,150,150,0.8) 100%);
+            border-radius: 50% 50% 40% 40%;
+            left:225px;
+            
+            position: relative;
+        }
+        .regular .filament {
+            width: 20px;
+            height: 30px;
+            background: #666;
+            position: absolute;
+            top: 40px;
+            left: 30px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        .regular.on {
+            background: radial-gradient(circle at center, #fff9a1 0%, #ffeb3b 70%);
+            box-shadow: 0 0 30px #ffeb3b, 0 0 60px #fff176;
+        }
+        .regular.on .filament {
+            background: #ff9100;
+            box-shadow: 0 0 15px #ff9100;
+        }
+        
+        /* Energy-Saving Bulb */
+        .energy {
+            width: 70px;
+            height: 110px;
+            background: linear-gradient(180deg, rgba(180,180,180,0.8) 0%, rgba(130,130,130,0.8) 100%);
+            border-radius: 30% 30% 50% 50%;
+            left:225px;
+            position: relative;
+        }
+        .energy .tube {
+            width: 40px;
+            height: 60px;
+            background: #888;
+            position: absolute;
+            top: 25px;
+            left: 15px;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+        .energy.on {
+            background: radial-gradient(circle at center, #f0fff0 0%, #ccffcc 70%);
+            box-shadow: 0 0 30px #ccffcc, 0 0 60px #b2ffb2;
+        }
+        .energy.on .tube {
+            background: #90ff90;
+            box-shadow: 0 0 15px #90ff90;
+        }
+        
+        /* LED Bulb */
+        .led {
+            width: 75px;
+            height: 100px;
+            background: linear-gradient(180deg, rgba(190,190,190,0.8) 0%, rgba(140,140,140,0.8) 100%);
+            border-radius: 40% 40% 60% 60%;
+            left:225px;
+            position: relative;
+        }
+        .led .leds {
+            width: 30px;
+            height: 40px;
+            background: #777;
+            position: absolute;
+            top: 30px;
+            left: 22px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .led.on {
+            background: radial-gradient(circle at center, #ffffff 0%, #e6f3ff 70%);
+            box-shadow: 0 0 30px #e6f3ff, 0 0 60px #b3d9ff;
+        }
+        .led.on .leds {
+            background: #b3d9ff;
+            box-shadow: 0 0 15px #b3d9ff;
+        }
+        
+        .bulb-base {
+            width: 30px;
+            height: 40px;
+            background: linear-gradient(90deg, #444 0%, #666 50%, #444 100%);
+            margin: auto;
+            position: relative;
+            top: -20px;
+            border-radius: 0 0 5px 5px;
+            border: 2px solid #222;
+            border-top: none;
+        }
+        .base-threads {
+            width: 100%;
+            height: 20px;
+            background: repeating-linear-gradient(
+                180deg,
+                #555 0px,
+                #555 2px,
+                #444 2px,
+                #444 4px
+            );
+        }
+
+        /* Controls */
+        select, button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #2196F3;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        select:hover, button:hover {
+            background: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Enhanced Light Bulb Simulator</h1>
+    <div class="container">
+        <select id="bulbType" onchange="changeBulbType()">
+            <option value="regular">Regular Bulb</option>
+            <option value="energy">Energy-Saving Bulb</option>
+            <option value="led">LED Bulb</option>
+        </select>
+        <button onclick="toggleLight()">Toggle Light</button>
+        <button onclick="adjustBrightness()">Adjust Brightness</button>
+        <div class="bulb-container">
+            <div id="bulb" class="bulb regular">
+                <div class="filament"></div>
+                <div class="glass" style="width: 80px; height: 120px; border-radius: 50% 50% 40% 40%;"></div>
+            </div>
+            <div class="bulb-base">
+                <div class="base-threads"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let isOn = false;
+        let timeout;
+
+        function toggleLight() {
+            const bulb = document.getElementById("bulb");
+            isOn = !isOn;
+            bulb.classList.toggle("on", isOn);
+            resetTimeout();
+        }
+
+        function adjustBrightness() {
+            const bulb = document.getElementById("bulb");
+            let brightness = prompt("Enter brightness (1-100):");
+            if (brightness >= 1 && brightness <= 100) {
+                bulb.style.filter = `brightness(${brightness}%)`;
+            } else {
+                alert("Invalid brightness level!");
+            }
+            resetTimeout();
+        }
+
+        function changeBulbType() {
+            const bulb = document.getElementById("bulb");
+            const bulbType = document.getElementById("bulbType").value;
+            bulb.className = `bulb ${bulbType}`;
+            if (bulbType === "regular") {
+                bulb.innerHTML = '<div class="filament"></div><div class="glass" style="width: 80px; height: 120px; border-radius: 50% 50% 40% 40%;"></div>';
+            } else if (bulbType === "energy") {
+                bulb.innerHTML = '<div class="tube"></div><div class="glass" style="width: 70px; height: 110px; border-radius: 30% 30% 50% 50%;"></div>';
+            } else if (bulbType === "led") {
+                bulb.innerHTML = '<div class="leds"></div><div class="glass" style="width: 75px; height: 100px; border-radius: 40% 40% 60% 60%;"></div>';
+            }
+            if (isOn) {
+                bulb.classList.add("on");
+            }
+        }
+
+        function resetTimeout() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                document.getElementById("bulb").classList.remove("on");
+                isOn = false;
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Таймер зворотного відліку</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .timer-container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="datetime-local"] {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer-container">
+        <h2>Таймер зворотного відліку</h2>
+        <input type="datetime-local" id="countdownInput">
+        <button onclick="startCountdown()">Запустити таймер</button>
+        <p id="countdown">Введіть дату та час для початку</p>
+    </div>
+
+    <script>
+        let timerInterval = null;
+
+        function startCountdown() {
+            const countdownDisplay = document.getElementById('countdown');
+            const endTimeInput = document.getElementById('countdownInput').value;
+
+            // Очищаємо попередній таймер
+            if (timerInterval !== null) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            // Перевіряємо, чи введено дату
+            if (!endTimeInput) {
+                countdownDisplay.innerText = 'Введіть дату та час!';
+                return;
+            }
+
+            const endTime = new Date(endTimeInput);
+
+            // Перевіряємо, чи дата валідна
+            if (isNaN(endTime.getTime())) {
+                countdownDisplay.innerText = 'Неправильна дата або час!';
+                return;
+            }
+
+            // Перевіряємо, чи дата в майбутньому
+            const now = new Date();
+            if (endTime <= now) {
+                countdownDisplay.innerText = 'Введіть дату в майбутньому!';
+                return;
+            }
+
+            // Оновлення таймера
+            function updateTimer() {
+                const currentTime = new Date();
+                const timeLeft = endTime - currentTime;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    countdownDisplay.innerText = 'Час вийшов!';
+                } else {
+                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    countdownDisplay.innerText = `Залишилось: ${days}д ${hours}г ${minutes}хв ${seconds}с`;
+                }
+            }
+
+            // Запускаємо таймер
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+    </script>
+</body>
+</html>

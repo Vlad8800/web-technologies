@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Світлофор</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .traffic-light {
+            width: 80px;
+            background-color: black;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .light {
+            width: 60px;
+            height: 60px;
+            margin: 10px auto;
+            border-radius: 50%;
+            background-color: gray;
+            transition: background-color 0.5s;
+        }
+        .red { background-color: red; }
+        .yellow { background-color: yellow; }
+        .green { background-color: green; }
+        .flashing {
+            animation: flash 0.5s infinite alternate;
+        }
+        @keyframes flash {
+            0% { background-color: yellow; }
+            100% { background-color: gray; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Світлофор</h1>
+    <div class="traffic-light">
+        <div id="red" class="light"></div>
+        <div id="yellow" class="light"></div>
+        <div id="green" class="light"></div>
+    </div>
+    <br>
+    <button onclick="nextState()">Наступний колір</button>
+    <button onclick="changeDurations()">Налаштувати час</button>
+    <p id="state-text">Колір: Red</p>
+    <script>
+        let durations = { red: 5000, yellow: 3000, green: 7000 };
+        let state = "red";
+        let timeout;
+
+        function changeLight(newState) {
+            clearTimeout(timeout);
+            document.getElementById("red").className = "light";
+            document.getElementById("yellow").className = "light";
+            document.getElementById("green").className = "light";
+            document.getElementById("state-text").innerText = "State: " + newState.charAt(0).toUpperCase() + newState.slice(1);
+
+            if (newState === "flashing") {
+                document.getElementById("yellow").classList.add("flashing");
+                timeout = setTimeout(() => {
+                    changeLight("red");
+                    startCycle();
+                }, 3000);
+                return;
+            }
+            document.getElementById(newState).classList.add(newState);
+            timeout = setTimeout(nextState, durations[newState]);
+        }
+
+        function nextState() {
+            if (state === "red") {
+                state = "yellow";
+            } else if (state === "yellow") {
+                state = "green";
+            } else if (state === "green") {
+                state = "flashing";
+            } else {
+                state = "red";
+            }
+            changeLight(state);
+        }
+
+        function changeDurations() {
+            let redTime = parseInt(prompt("Enter Red light duration in ms", durations.red));
+            let yellowTime = parseInt(prompt("Enter Yellow light duration in ms", durations.yellow));
+            let greenTime = parseInt(prompt("Enter Green light duration in ms", durations.green));
+            if (!isNaN(redTime) && !isNaN(yellowTime) && !isNaN(greenTime)) {
+                durations.red = redTime;
+                durations.yellow = yellowTime;
+                durations.green = greenTime;
+                changeLight(state);
+            } else {
+                alert("Invalid input!");
+            }
+        }
+
+        changeLight("red");
+    </script>
+</body>
+</html>
