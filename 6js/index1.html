@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список завдань</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Список завдань</h1>
+    </header>
+
+    <main>
+        <section class="task-input">
+            <form class="add-task-form">
+                <input type="text" name="task" placeholder="Введіть нове завдання" required>
+                <button type="submit">Додати</button>
+            </form>
+        </section>
+
+        <section class="sorting">
+            <h2>Сортування</h2>
+            <button class="sort-created">За датою додавання</button>
+            <button class="sort-completed">За станом</button>
+            <button class="sort-updated">За датою оновлення</button>
+            <button class="reset-sort">Скинути</button>
+        </section>
+
+        <section class="tasks">
+            <ul class="task-list"></ul>
+        </section>
+    </main>
+
+    <script src="script1.js"></script>
+</body>
+</html>

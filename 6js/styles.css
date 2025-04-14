@@ -1,0 +1,153 @@
+/* styles.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #f5f5f5;
+}
+
+header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.task-input {
+    margin-bottom: 20px;
+}
+
+.add-task-form {
+    display: flex;
+    gap: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.add-task-form input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.add-task-form button {
+    padding: 10px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-task-form button:hover {
+    background: #45a049;
+}
+
+.sorting {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.sorting button {
+    padding: 8px 16px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+}
+
+.sorting button:hover {
+    background: #f0f0f0;
+}
+
+.task-list {
+    list-style: none;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    animation: fadeIn 0.3s ease-in;
+}
+
+.task-item.completed {
+    background: #e0e0e0;
+    text-decoration: line-through;
+    color: #666;
+}
+
+.task-item span {
+    flex: 1;
+    cursor: pointer;
+}
+
+.task-item input[type="text"] {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.task-item button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.task-item .delete-btn {
+    background: #ff4444;
+    color: white;
+}
+
+.task-item .delete-btn:hover {
+    background: #cc0000;
+}
+
+.task-item .edit-btn {
+    background: #2196F3;
+    color: white;
+}
+
+.task-item .edit-btn:hover {
+    background: #1976D2;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(10px); }
+}
+
+@media (max-width: 600px) {
+    .add-tasks-task-form {
+        flex-direction: column;
+    }
+
+    .task-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .task-item button {
+        margin-left: 0;
+        margin-top: 5px;
+    }
+}
