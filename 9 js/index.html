@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Форма Авторизації та Реєстрації</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+   
+<div class="form-container"> <h2>Ствоити аккаунт або Вхід</h2>
+  <div class="tabs">
+    <button class="tab-button active" onclick="showTab('signup')">Зареструватися</button>
+    <button class="tab-button" onclick="showTab('login')">Увійти</button>
+  </div>
+
+  <form id="signup" class="form active" onsubmit="validateSignup(event)">
+    <h2>Ствоити аккаунт</h2>
+    <input type="text" id="firstName" placeholder="Ім'я">
+    <small class="error-message"></small>
+
+    <input type="text" id="lastName" placeholder="Прізвище">
+    <small class="error-message"></small>
+
+    <input type="email" id="email" placeholder="Email">
+    <small class="error-message"></small>
+
+    <div class="password-container">
+      <input type="password" id="password" placeholder="Пароль">
+      <span class="toggle-password" onclick="togglePassword('password')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+      </svg></span>
+    </div>
+    <small class="error-message"></small>
+
+    <div class="password-container">
+      <input type="password" id="confirmPassword" placeholder="Підтвердіть пароль">
+      <span class="toggle-password" onclick="togglePassword('confirmPassword')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+      </svg></span>
+    </div>
+    <small class="error-message"></small>
+
+    <input type="text" id="phone" placeholder="Номер телефону (+380...)">
+    <small class="error-message"></small>
+
+    <input type="date" id="birthDate">
+    <small class="error-message"></small>
+
+    <select id="sex">
+      <option value="">Вибирати стать</option>
+      <option value="male">Чоловіча</option>
+      <option value="female">Жіноча</option>
+    </select>
+    <small class="error-message"></small>
+
+    <select id="country" onchange="loadCities()">
+      <option value="">Країна</option>
+      <option value="Ukraine">Україне</option>
+    </select>
+    <small class="error-message"></small>
+
+    <select id="city" disabled>
+      <option value="">Вибирати місто</option>
+    </select>
+    <small class="error-message"></small>
+
+    <button type="submit">Зареструватися</button>
+  </form>
+
+  <!-- Форма логіну -->
+  <form id="login" class="form" onsubmit="validateLogin(event)">
+    <h2>Увійти</h2>
+    <input type="text" id="loginUsername" placeholder="Нікнейм">
+    <small class="error-message"></small>
+
+    <div class="password-container">
+      <input type="password" id="loginPassword" placeholder="Пароль">
+      <span class="toggle-password" onclick="togglePassword('loginPassword')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+      </svg></span>
+    </div>
+    <small class="error-message"></small>
+
+    
+      <input type="checkbox" id="rememberMe"> Запам'ятати мене
+    
+
+    <button type="submit">Увійти</button>
+  </form>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
