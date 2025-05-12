@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Kanban Board</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    padding: 20px;
+  }
+
+  h2 {
+    color: white;
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+  }
+  h1 {
+    color: black;
+    margin: 25px 25px 25px 25px;
+    padding: 10px;
+    text-align: center;
+  }
+  .board {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .column {
+    background: #e2e2e2;
+    border-radius: 8px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    max-height: 400px;
+  }
+
+  .column-header {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .todo .column-header {
+    background: #2196f3;
+  }
+
+  .working .column-header {
+    background: #ff9800;
+  }
+
+  .done .column-header {
+    background: #4caf50;
+  }
+
+  .task-list {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 0 0 8px 8px;
+    min-height: 100px;
+  }
+
+  .task {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 8px;
+    cursor: grab;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .task.dragging {
+    opacity: 0.5;
+  }
+
+  .task-list.over {
+    background-color: #e0f7fa;
+  }
+</style>
+</head>
+<body>
+
+<h1>Kanban Board</h1>
+
+<div class="board">
+  <div class="column todo">
+    <div class="column-header"><h2>To do</h2></div>
+    <div class="task-list" id="todo">
+      <div class="task" draggable="true">Item #9</div>
+      <div class="task" draggable="true">Item #3</div>
+      <div class="task" draggable="true">Item #5</div>
+      <div class="task" draggable="true">Item #4</div>
+    </div>
+  </div>
+
+  <div class="column working">
+    <div class="column-header"><h2>Working</h2></div>
+    <div class="task-list" id="working">
+      <div class="task" draggable="true">Item #6</div>
+      <div class="task" draggable="true">Item #8</div>
+      <div class="task" draggable="true">Item #7</div>
+    </div>
+  </div>
+
+  <div class="column done">
+    <div class="column-header"><h2>Done</h2></div>
+    <div class="task-list" id="done">
+      <div class="task" draggable="true">Item #11</div>
+      <div class="task" draggable="true">Item #2</div>
+      <div class="task" draggable="true">Item #13</div>
+      <div class="task" draggable="true">Item #14</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tasks = document.querySelectorAll('.task');
+  const lists = document.querySelectorAll('.task-list');
+
+  tasks.forEach(task => {
+    task.addEventListener('dragstart', () => {
+      task.classList.add('dragging');
+    });
+    task.addEventListener('dragend', () => {
+      task.classList.remove('dragging');
+    });
+  });
+
+  lists.forEach(list => {
+    list.addEventListener('dragover', e => {
+      e.preventDefault();
+      list.classList.add('over');
+    });
+
+    list.addEventListener('dragleave', () => {
+      list.classList.remove('over');
+    });
+
+    list.addEventListener('drop', e => {
+      e.preventDefault();
+      const draggingTask = document.querySelector('.dragging');
+      if (draggingTask) {
+        list.appendChild(draggingTask);
+      }
+      list.classList.remove('over');
+    });
+  });
+</script>
+
+</body>
+</html>
